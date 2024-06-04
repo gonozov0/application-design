@@ -1,0 +1,104 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "contact": {}
+    },
+    "paths": {
+        "/orders": {
+            "post": {
+                "description": "Creates an order based on the hotel and room IDs provided along with the booking period from the",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "orders"
+                ],
+                "summary": "Create and pay for an order",
+                "parameters": [
+                    {
+                        "description": "Order creation request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/internal_application_orders_handlers.CreateRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Order successfully created with unique identifier",
+                        "schema": {
+                            "$ref": "#/definitions/internal_application_orders_handlers.CreateResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid booking dates or invalid data format",
+                        "schema": {
+                            "$ref": "#/definitions/application-design_pkg_responses.Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Hotel, room, or user not found",
+                        "schema": {
+                            "$ref": "#/definitions/application-design_pkg_responses.Error"
+                        }
+                    },
+                    "409": {
+                        "description": "Room already booked for the selected dates",
+                        "schema": {
+                            "$ref": "#/definitions/application-design_pkg_responses.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error if order processing fails unexpectedly",
+                        "schema": {
+                            "$ref": "#/definitions/application-design_pkg_responses.Error"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "application-design_pkg_responses.Error": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "internal_application_orders_handlers.CreateRequest": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "from": {
+                    "type": "string"
+                },
+                "hotel_id": {
+                    "type": "string"
+                },
+                "room_id": {
+                    "type": "string"
+                },
+                "to": {
+                    "type": "string"
+                }
+            }
+        },
+        "internal_application_orders_handlers.CreateResponse": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}
