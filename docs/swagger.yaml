@@ -1,0 +1,67 @@
+definitions:
+  application-design_pkg_responses.Error:
+    properties:
+      message:
+        type: string
+    type: object
+  internal_application_orders_handlers.CreateRequest:
+    properties:
+      email:
+        type: string
+      from:
+        type: string
+      hotel_id:
+        type: string
+      room_id:
+        type: string
+      to:
+        type: string
+    type: object
+  internal_application_orders_handlers.CreateResponse:
+    properties:
+      id:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /orders:
+    post:
+      consumes:
+      - application/json
+      description: Creates an order based on the hotel and room IDs provided along
+        with the booking period from the
+      parameters:
+      - description: Order creation request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/internal_application_orders_handlers.CreateRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Order successfully created with unique identifier
+          schema:
+            $ref: '#/definitions/internal_application_orders_handlers.CreateResponse'
+        "400":
+          description: Invalid booking dates or invalid data format
+          schema:
+            $ref: '#/definitions/application-design_pkg_responses.Error'
+        "404":
+          description: Hotel, room, or user not found
+          schema:
+            $ref: '#/definitions/application-design_pkg_responses.Error'
+        "409":
+          description: Room already booked for the selected dates
+          schema:
+            $ref: '#/definitions/application-design_pkg_responses.Error'
+        "500":
+          description: Internal server error if order processing fails unexpectedly
+          schema:
+            $ref: '#/definitions/application-design_pkg_responses.Error'
+      summary: Create and pay for an order
+      tags:
+      - orders
+swagger: "2.0"
